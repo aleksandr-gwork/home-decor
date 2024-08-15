@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {ProductService} from "../../../shared/services/product.service";
 import {ProductType} from "../../../../types/product.type";
 import {CategoryService} from "../../../shared/services/category.service";
@@ -47,6 +47,10 @@ export class CatalogComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // this.router.navigate(['/catalog'], {
+    //   queryParams: this.activeParams
+    // })
+
     this.cartService.getCart()
       .subscribe((data: CartType | DefaultResponseType) => {
         if ((data as DefaultResponseType).error !== undefined) {
@@ -215,6 +219,13 @@ export class CatalogComponent implements OnInit {
       this.router.navigate(['/catalog'], {
         queryParams: this.activeParams
       })
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  click(event: Event) {
+    if (this.sortingOpen && (event.target as HTMLElement).className.indexOf('catalog-sorting') === -1) {
+      this.sortingOpen = false;
     }
   }
 }
